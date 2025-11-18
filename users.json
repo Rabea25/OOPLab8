@@ -1,0 +1,61 @@
+[
+  {
+    "enrolledCourses": [],
+    "userId": "S1",
+    "role": "student",
+    "username": "arb3",
+    "email": "arabe3@rabe3.com",
+    "passwordHash": "7447db894a819e41049533f87fe09d2698276eb816962f9205310f1ef5d478b7"
+  },
+  {
+    "enrolledCourses": [
+      "C1"
+    ],
+    "progress": {},
+    "userId": "S2",
+    "role": "student",
+    "username": "b",
+    "email": "b@b.com",
+    "passwordHash": "7447db894a819e41049533f87fe09d2698276eb816962f9205310f1ef5d478b7"
+  },
+  {
+    "createdCourses": [],
+    "userId": "I1",
+    "role": "instructor",
+    "username": "RABE3intsructor123",
+    "email": "rabe3@rabe3.co",
+    "passwordHash": "2122ca189dc9713f17b1a3b66501028983cb9defb253362465811d46535913b9"
+  },
+  {
+    "createdCourses": [
+      "C1",
+      "C2"
+    ],
+    "userId": "1",
+    "role": "instructor",
+    "username": "1",
+    "email": "1",
+    "passwordHash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+  },
+  {
+    "enrolledCourses": [
+      "C2",
+      "C1"
+    ],
+    "progress": {
+      "C2": [
+        "L2"
+      ],
+      "C1": [
+        "L1",
+        "L3",
+        "L4"
+      ]
+    },
+    "userId": "S3",
+    "role": "student",
+    "username": "STUDENT RABE3",
+    "email": "2",
+    "passwordHash": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "description": "dfgh fghddfg hdfg hj",
+    "title": "asfsdf",
+    "courseId": "C1",
+    "instructorId": "1",
+    "lessons": [
+      {
+        "lessonId": "L1",
+        "title": "FIRST LESSON",
+        "content": "SOMETHING SOMETHING",
+        "resources": [
+          "a",
+          "b",
+          "c",
+          "d",
+          "sdjklfghasdfgkjhdfsgjk dfgs",
+          "dfgh"
+        ]
+      },
+      {
+        "lessonId": "L3",
+        "title": "wererty",
+        "content": "t rty erty erty erty ert y",
+        "resources": []
+      },
+      {
+        "lessonId": "L4",
+        "title": "cxgh",
+        "content": "fsgh  fg hfh fg h",
+        "resources": []
+      }
+    ],
+    "enrolledStudents": [
+      "S2",
+      "S3"
+    ]
+  },
+  {
+    "description": "dfghj fdg hdfg hfg hdfg hdhfg",
+    "title": "3415",
+    "courseId": "C2",
+    "instructorId": "1",
+    "lessons": [
+      {
+        "lessonId": "L2",
+        "title": "dftyhjdfhgjghfj",
+        "content": "fg jfdhj fhdj dfh jdfj",
+        "resources": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      }
+    ],
+    "enrolledStudents": [
+      "S3"
+    ]
+  }
+]
