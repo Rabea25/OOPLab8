@@ -6,40 +6,57 @@
     "instructorId": "1",
     "lessons": [
       {
-        "lessonId": "L1",
-        "title": "FIRST LESSON",
-        "content": "SOMETHING SOMETHING",
+        "lessonId": "L11",
+        "title": "aaaaaa",
+        "content": "aaaaaaaaaaaaaaa",
         "resources": [
           "a",
-          "b",
-          "c",
-          "d",
-          "sdjklfghasdfgkjhdfsgjk dfgs",
-          "dfgh"
-        ]
-      },
-      {
-        "lessonId": "L3",
-        "title": "wererty",
-        "content": "t rty erty erty erty ert y",
-        "resources": []
-      },
-      {
-        "lessonId": "L4",
-        "title": "cxgh",
-        "content": "fsgh  fg hfh fg h",
-        "resources": []
-      },
-      {
-        "lessonId": "L5",
-        "title": "1234",
-        "content": "1243dsfgdsfg",
-        "resources": [
-          "1",
-          " 1",
-          " 1",
-          " 1"
-        ]
+          "a",
+          "a",
+          "a"
+        ],
+        "quiz": {
+          "title": "ABCD",
+          "lessonId": "L11",
+          "questions": [
+            "aa",
+            "dfgd",
+            "EEE",
+            ""
+          ],
+          "options": [
+            [
+              "aa",
+              "a",
+              "a",
+              "a"
+            ],
+            [
+              "f",
+              "dfgd",
+              "d",
+              "d"
+            ],
+            [
+              "e",
+              "e",
+              "e",
+              "EEE"
+            ],
+            [
+              "",
+              "",
+              "",
+              ""
+            ]
+          ],
+          "answers": [
+            0,
+            1,
+            3,
+            0
+          ]
+        }
       }
     ],
     "enrolledStudents": [
@@ -54,16 +71,46 @@
     "instructorId": "1",
     "lessons": [
       {
-        "lessonId": "L2",
-        "title": "dftyhjdfhgjghfj",
-        "content": "fg jfdhj fhdj dfh jdfj",
+        "lessonId": "L10",
+        "title": "aaaaa",
+        "content": "aaaaaaaaaaaa",
         "resources": [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5"
-        ]
+          "a"
+        ],
+        "quiz": {
+          "title": "aaaa",
+          "lessonId": "L10",
+          "questions": [
+            "aa",
+            "bb",
+            "cc"
+          ],
+          "options": [
+            [
+              "aa",
+              "a",
+              "a",
+              "a"
+            ],
+            [
+              "b",
+              "b",
+              "bb",
+              "b"
+            ],
+            [
+              "c",
+              "cc",
+              "c",
+              "c"
+            ]
+          ],
+          "answers": [
+            0,
+            2,
+            1
+          ]
+        }
       }
     ],
     "enrolledStudents": [

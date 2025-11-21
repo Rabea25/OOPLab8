@@ -8,7 +8,7 @@ public class Lesson {
     private String title;
     private String content;
     private List<String> resources;
-    //private Quiz quiz;
+    private Quiz quiz;
 
     public Lesson(String lessonId, String title, String content, List<String> resources) {
         this.lessonId = lessonId;
@@ -56,12 +56,17 @@ public class Lesson {
         }
         return false;
     }
-//    public Quiz getQuiz() {
-//        return quiz;
-//    }
-//    public void setQuiz(Quiz quiz) {
-//        this.quiz = quiz;
-//    }
+    public Quiz getQuiz() {
+        return quiz;
+    }
+    public void updateQuiz(String title, ArrayList<String> questions, ArrayList<String[]> options, ArrayList<Integer> answers) {
+        if(this.quiz == null) this.quiz = new Quiz(title, this.lessonId, questions, options, answers);
+        else{
+            this.quiz.setTitle(title);
+            this.quiz.setQuestions(questions, options, answers);
+        }
+
+    }
 }
 
 

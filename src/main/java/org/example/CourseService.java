@@ -131,9 +131,9 @@ public class CourseService {
         return null;
     }
 
-    public boolean addLesson(String courseId, String title, String content, List<String> resources) {
+    public String addLesson(String courseId, String title, String content, List<String> resources) {
         Course c = getCourseById(courseId);
-        if(c == null) return  false;
+        if(c == null) return null;
 
 
         String lessonId = Utilities.generateLessonId();
@@ -141,7 +141,21 @@ public class CourseService {
         c.addLesson(newLesson);
         saveCourses();
 
-        return true;
+        return lessonId;
+    }
+
+    public String addLesson(String courseId, String title, String content, List<String> resources, String qtitle, ArrayList<String> questions, ArrayList<String[]> options, ArrayList<Integer> answers){
+        Course c = getCourseById(courseId);
+        if(c == null) return null;
+
+
+        String lessonId = Utilities.generateLessonId();
+        Lesson newLesson = new Lesson(lessonId, title, content, resources);
+        newLesson.updateQuiz(qtitle, questions, options, answers);
+        c.addLesson(newLesson);
+        saveCourses();
+
+        return lessonId;
     }
 
     public boolean editLesson(String courseId, String lessonId, String newT, String newC) {
@@ -196,6 +210,8 @@ public class CourseService {
         if(c == null) return null;
         return c.getLessonById(lessonId);
     }
+
+
 
     public boolean enrollStudent(String courseId, String studentId) {
 

@@ -1,6 +1,8 @@
 package org.example;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.*;
@@ -24,6 +26,7 @@ public class InstructorDashboard extends JPanel{
     private JPanel quizPanel;
     private JLabel questionsNo;
     private JLabel quizTitle;
+    private JButton editQuizButton;
     private UserService userService;
     private CourseService courseService;
     private Instructor instructor;
@@ -54,6 +57,15 @@ public class InstructorDashboard extends JPanel{
         editLessonButton.addActionListener(e -> editLesson());
         editCourseButton.addActionListener(e -> editCourse());
         addCourseButton.addActionListener(e -> addCourse());
+
+        lessonsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    updateQuizDetails();
+                }
+            }
+        });
 
         refresh();
     }
@@ -93,6 +105,7 @@ public class InstructorDashboard extends JPanel{
             @Override
             public boolean isCellEditable(int row, int column) {return false;}
         });
+        if(lessons.length > 0) lessonsTable.setRowSelectionInterval(0,0);
     }
 
     private void updateStudentsTable(){
@@ -193,5 +206,24 @@ public class InstructorDashboard extends JPanel{
         if(addCourseDialog.isSaved()){
             refresh();
         }
+    }
+
+    public void updateQuizDetails(){
+        if(lessonsTable.getSelectedRow() < 0){
+            quizTitle.setText("Title: N/A");
+            questionsNo.setText("Questions: N/A");
+            return;
+        }
+        String lessonId = lessonsTable.getValueAt(lessonsTable.getSelectedRow(), 0).toString();
+        String courseId = courses.get(coursesComboBox.getSelectedIndex()).getCourseId();
+        Lesson lesson = courseService.getLessonById(courseId, lessonId);
+        Quiz quiz = lesson.getQuiz();
+        if(quiz == null){
+            quizTitle.setText("Title: N/A");
+            questionsNo.setText("Questions: N/A");
+            return;
+        }
+        quizTitle.setText("Title: "+quiz.getTitle());
+        questionsNo.setText("Questions: "+String.valueOf(quiz.getNumberOfQuestions()));
     }
 }
