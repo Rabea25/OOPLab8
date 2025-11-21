@@ -76,5 +76,9 @@ public class Quiz {
         return correction;
     }
 
+    public boolean passed(int score){
+        return score*1.0 >= (questions.size()*0.7);
+    }
+
 
 }

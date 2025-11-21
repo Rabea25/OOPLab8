@@ -109,6 +109,7 @@ public class AddLessonDialog extends JDialog{
     }
 
     public boolean saveCurrentQuestion(String dir){
+
         String[] opts = new String[4];
         opts[0] = choice1Field.getText().trim();
         opts[1] = choice2Field.getText().trim();
@@ -117,10 +118,15 @@ public class AddLessonDialog extends JDialog{
 
         String qtitle = questionField.getText().trim();
 
+        if(Objects.equals(dir, "rev") && currentQuestionIndex==questions.size() && qtitle.isEmpty() && opts[0].isEmpty() && opts[1].isEmpty() && opts[2].isEmpty() && opts[3].isEmpty()){
+            return true;
+        }
+
         if(((Objects.equals(dir, "rev") && currentQuestionIndex<questions.size()) || (Objects.equals(dir, "fwd"))) && (opts[0].isEmpty() || opts[1].isEmpty() || opts[2].isEmpty() || opts[3].isEmpty() || qtitle.isEmpty())){
              JOptionPane.showMessageDialog(root, "All question fields must be not empty.", "Error", JOptionPane.ERROR_MESSAGE);
              return false;
         }
+
 
         int selectedAnswer = 0;
         if(choice2RadioButton.isSelected()) selectedAnswer = 1;

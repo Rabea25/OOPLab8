@@ -290,5 +290,10 @@ public class CourseService {
         return completedLessons;
     }
 
+    public Quiz getQuiz(String lessonId, String courseId){
+        Lesson lesson = getLessonById(courseId, lessonId);
+        return lesson.getQuiz();
+    }
+
 }
 

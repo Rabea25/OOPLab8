@@ -6,6 +6,7 @@ import java.util.Map;
 public class Student extends User{
     ArrayList<String> enrolledCourses = new ArrayList<>();
     Map<String, ArrayList<String>> progress;
+    ArrayList<QuizAttempt> quizAttempts = new ArrayList<>();
     public Student(String userId, String role, String username, String email, String passwordHash) {
         super(userId, role, username, email, passwordHash);
         progress = new java.util.HashMap<>();
@@ -34,6 +35,18 @@ public class Student extends User{
         } else {
             return new String[0];
         }
+    }
+    public void addQuizAttempt(QuizAttempt attempt) {
+        quizAttempts.add(attempt);
+    }
+    public ArrayList<QuizAttempt> getQuizAttemptsbyLessonId(String lessonId) {
+        ArrayList<QuizAttempt> attemptsForLesson = new ArrayList<>();
+        for (QuizAttempt attempt : quizAttempts) {
+            if (attempt.getLessonId().equals(lessonId)) {
+                attemptsForLesson.add(attempt);
+            }
+        }
+        return attemptsForLesson;
     }
 
 

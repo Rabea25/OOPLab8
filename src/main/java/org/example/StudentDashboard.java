@@ -5,6 +5,8 @@ import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class StudentDashboard extends JPanel{
@@ -23,6 +25,7 @@ public class StudentDashboard extends JPanel{
     private JTextArea contentArea;
     private JTextArea resoucresArea;
     private JLabel titleLabel2;
+    private JButton viewَQuizAttemptsButton;
     private Student student;
     private ArrayList<Course> courses;
     private CourseService courseService;
@@ -58,6 +61,7 @@ public class StudentDashboard extends JPanel{
     }
 
     private void refresh(){
+
         coursesComboBox.removeAllItems();
         courses = courseService.getCoursesByStudentId(student.getUserId());
         if(courses.isEmpty()){
@@ -79,6 +83,7 @@ public class StudentDashboard extends JPanel{
         }
         Course selectedCourse = courses.get(coursesComboBox.getSelectedIndex());
         Lesson[] lessons = selectedCourse.getLessons();
+        Arrays.sort(lessons, Comparator.comparing(Lesson::getLessonId));
         //ArrayList<Lesson> completedLessons = courseService.getCompletedLessons(student.getUserId(), selectedCourse.getCourseId());
         List<String> completedLessonIds = List.of(student.getProgress(selectedCourse.getCourseId()));
         String[] columns = {"Lesson ID", "Title", "Content", "Completion"};
@@ -99,6 +104,7 @@ public class StudentDashboard extends JPanel{
         descLabel.setText(selectedCourse.getDescription());
         progressLabel.setText("Progress: " + completedLessonIds.size() + " / " + lessons.length + " lessons completed.");
         if(completedLessonIds.size() == lessons.length) progressLabel.setText(progressLabel.getText() + " Course Completed!");
+        if(lessonsTable.getRowCount() > 0) lessonsTable.setRowSelectionInterval(0, 0);
         updateLessonDetails();
     }
 
@@ -139,12 +145,15 @@ public class StudentDashboard extends JPanel{
             return;
         }
 
-        boolean success = courseService.completeLesson(courses.get(coursesComboBox.getSelectedIndex()).getCourseId(), student.getUserId(), (String) lessonsTable.getValueAt(selectedRow, 0));
+
+        boolean pass = false, success = false;
+
+        if(pass) success = courseService.completeLesson(courses.get(coursesComboBox.getSelectedIndex()).getCourseId(), student.getUserId(), (String) lessonsTable.getValueAt(selectedRow, 0));
         if(success){
-            JOptionPane.showMessageDialog(this, "Lesson marked as complete.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Quiz passed and lesson complete.", "Success", JOptionPane.INFORMATION_MESSAGE);
             updateLessonsTable();
         } else {
-            JOptionPane.showMessageDialog(this, "Failed to complete lesson.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Quiz failed, lesson is incomplete.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     public void updateLessonDetails(){
@@ -158,7 +167,8 @@ public class StudentDashboard extends JPanel{
         titleLabel2.setText(lesson.getTitle());
         contentArea.setText(lesson.getContent());
         StringBuilder resourcesText = new StringBuilder();
-        for(String resource : lesson.getResources()) resourcesText.append(resource).append("\n");
+        int cnt = 1;
+        for(String resource : lesson.getResources()) resourcesText.append(cnt++).append(") ").append(resource).append("\n");
         resoucresArea.setText(resourcesText.toString());
         contentArea.setEditable(false);
         resoucresArea.setEditable(false);

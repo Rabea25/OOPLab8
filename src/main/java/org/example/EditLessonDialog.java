@@ -128,7 +128,9 @@ public class EditLessonDialog extends JDialog{
         opts[3] = choice4Field.getText().trim();
 
         String qtitle = questionField.getText().trim();
-
+        if(Objects.equals(dir, "rev") && currentQuestionIndex==questions.size() && qtitle.isEmpty() && opts[0].isEmpty() && opts[1].isEmpty() && opts[2].isEmpty() && opts[3].isEmpty()){
+            return true;
+        }
         if(((Objects.equals(dir, "rev") && currentQuestionIndex<questions.size()) || (Objects.equals(dir, "fwd"))) && (opts[0].isEmpty() || opts[1].isEmpty() || opts[2].isEmpty() || opts[3].isEmpty() || qtitle.isEmpty())){
             JOptionPane.showMessageDialog(root, "All question fields must be not empty.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
