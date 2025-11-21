@@ -1,8 +1,24 @@
 package org.example;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public class GenerateID {
+public class Utilities {
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest hasher = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = hasher.digest(password.getBytes());
+            StringBuilder hashedPassword = new StringBuilder();
+            for (byte b : hashedBytes){
+                hashedPassword.append(String.format("%02x", b));
+            }
+            return hashedPassword.toString();
+        } catch (NoSuchAlgorithmException bdbd ){
+            throw new RuntimeException();
+        }
+    }
+
     public static String generateStudentId(){
         List<User> students = JsonDatabaseManager.loadUsers();
         int max = 0;
@@ -37,11 +53,11 @@ public class GenerateID {
         List<Course> courses = JsonDatabaseManager.loadCourses();
         int max = 0;
         for (Course cs : courses) {
-                String ID = cs.getCourseId();
-                int number = extractNumber(ID);
-                if (number > max){
-                    max = number;
-                }
+            String ID = cs.getCourseId();
+            int number = extractNumber(ID);
+            if (number > max){
+                max = number;
+            }
         }
         return "C" + (max + 1);
     }
@@ -50,14 +66,14 @@ public class GenerateID {
         List<Course> courses = JsonDatabaseManager.loadCourses();
         int max = 0;
         for (Course cs : courses){
-                Lesson[] lessons = cs.getLessons();
-                for (Lesson l : lessons) {
-                    String ID = l.getLessonId();
-                    int number = extractNumber(ID);
-                    if (number > max){
-                        max = number;
-                    }
+            Lesson[] lessons = cs.getLessons();
+            for (Lesson l : lessons) {
+                String ID = l.getLessonId();
+                int number = extractNumber(ID);
+                if (number > max){
+                    max = number;
                 }
+            }
         }
         return "L" + (max + 1);
     }

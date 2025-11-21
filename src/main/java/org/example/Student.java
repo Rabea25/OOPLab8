@@ -27,9 +27,6 @@ public class Student extends User{
     public void removeCourse(String courseId) {
         enrolledCourses.remove(courseId);
     }
-    public void setProgress(Map<String, ArrayList<String>> progress) {
-        this.progress = progress;
-    }
     public String[] getProgress(String courseId) {
         ArrayList<String> completedLessons = progress.get(courseId);
         if (completedLessons != null) {

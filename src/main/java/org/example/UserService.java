@@ -1,13 +1,17 @@
 package org.example;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class UserService {
     private ArrayList<User> users;
-
+    private CourseService courseService;
     public UserService() {
         this.users = new ArrayList<>(JsonDatabaseManager.loadUsers());
     }
+    public void setCourseService(CourseService courseService) {
+        this.courseService = courseService;
+    }
+
 
     public User login(String email, String passwordHash) {
         for(User u : users) {
@@ -20,11 +24,11 @@ public class UserService {
     public User signup(String role, String username, String email, String passwordHash){
 
         User newUser;
-        if(role.equals("student")) newUser = new Student(GenerateID.generateStudentId(), "student",  username, email, passwordHash);
-        else newUser = new Instructor(GenerateID.generateInstructorId(), "instructor", username, email, passwordHash);
+        if(role.equals("student")) newUser = new Student(Utilities.generateStudentId(), "student",  username, email, passwordHash);
+        else newUser = new Instructor(Utilities.generateInstructorId(), "instructor", username, email, passwordHash);
 
         users.add(newUser);
-        JsonDatabaseManager.writeUsers(users);
+        saveUsers();
         return newUser;
     }
 
@@ -34,11 +38,11 @@ public class UserService {
     }
     public void addUser(User user) {
         users.add(user);
-        JsonDatabaseManager.writeUsers(users);
+        saveUsers();
     }
     public void removeUser(String userId) {
         for(User u : users) if(u.getUserId().equals(userId)) {users.remove(u); break;}
-        JsonDatabaseManager.writeUsers(users);
+        saveUsers();
     }
     public User getUserByUsername(String username) {
         for(User u : users) if(u.getUsername().equals(username)) return u;
@@ -55,8 +59,40 @@ public class UserService {
     public void updateUser(User updatedUser){
         removeUser(updatedUser.getUserId());
         addUser(updatedUser);
-        JsonDatabaseManager.writeUsers(users);
+        saveUsers();
     }
+
+    public ArrayList<Lesson> getUserLessons(String userId) {
+        User user = getUserById(userId);
+        if(!(user instanceof Student student)) return null;
+        String[] courses = student.getEnrolledCourses();
+
+        ArrayList<Lesson> lessons = new ArrayList<>();
+        for(String courseId : courses){
+            Course course = courseService.getCourseById(courseId);
+            if(course != null){
+                for(Lesson lesson : course.getLessons()){
+                    lessons.add(lesson);
+                }
+            }
+        }
+        return lessons;
+    }
+    public ArrayList<Lesson> getUserLessons(String userId, String courseId) {
+        User user = getUserById(userId);
+        if(!(user instanceof Student student)) return null;
+
+        String[] courses = student.getEnrolledCourses();
+        if(!Arrays.asList(courses).contains(courseId)) return null;
+
+        Course course = courseService.getCourseById(courseId);
+
+        if(course != null) return new ArrayList<>(Arrays.asList(course.getLessons()));
+        return null;
+    }
+
+
+
 
     public void saveUsers() {
         JsonDatabaseManager.writeUsers(users);

@@ -8,12 +8,13 @@ public class Lesson {
     private String title;
     private String content;
     private List<String> resources;
+    //private Quiz quiz;
 
-    public Lesson(String lessonId, String title, String content) {
+    public Lesson(String lessonId, String title, String content, List<String> resources) {
         this.lessonId = lessonId;
         this.title = title;
         this.content = content;
-        this.resources = new ArrayList<>();
+        this.resources = resources;
     }
 
 
@@ -52,7 +53,15 @@ public class Lesson {
                 resources.remove(res);
                 return true;
             }
-        }return false;}
+        }
+        return false;
+    }
+//    public Quiz getQuiz() {
+//        return quiz;
+//    }
+//    public void setQuiz(Quiz quiz) {
+//        this.quiz = quiz;
+//    }
 }
 
 

@@ -36,7 +36,7 @@ public class LoginPanel extends JPanel {
                     return;
                 }
 
-                String passwordHash = PasswordManager.hashing(password);
+                String passwordHash = Utilities.hashPassword(password);
                 User user = svc.login(email, passwordHash);
                 if(user == null) {
                     JOptionPane.showMessageDialog(root, "Invalid email or password.", "Error", JOptionPane.ERROR_MESSAGE);

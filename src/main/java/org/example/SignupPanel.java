@@ -65,7 +65,7 @@ public class SignupPanel extends JPanel{
                 }
 
                 String selectedRole = role.getSelection().getActionCommand();
-                String passwordHash = PasswordManager.hashing(password);
+                String passwordHash = Utilities.hashPassword(password);
                 User newUser = svc.signup(selectedRole, username, email, passwordHash);
 
                 JOptionPane.showMessageDialog(root, "Signup successful! You can now login.", "Success", JOptionPane.INFORMATION_MESSAGE);

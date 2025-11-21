@@ -3,10 +3,11 @@ package org.example;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 public class CourseService {
 
-    private List<Course> courses;
-    private UserService userService;
+    private final List<Course> courses;
+    private final UserService userService;
 
     public CourseService(UserService userService) {
         this.userService = userService;
@@ -29,24 +30,23 @@ public class CourseService {
         return null;
     }
 
-    public Course[] getCoursesByInstructor(String instructorID) {
-        List<Course> AllCourses = new ArrayList<>();
+    public ArrayList<Course> getCoursesByInstructorId(String instructorID) {
+        ArrayList<Course> AllCourses = new ArrayList<>();
         for (Course c : courses) {
             if (c.getInstructorId().equals(instructorID))
                 AllCourses.add(c);
         }
-        return AllCourses.toArray(new Course[0]);
+        return AllCourses;
     }
 
-    public List<Course> getCoursesForStudent(String studentId) {
-        User student = userService.getUserById(studentId);
-        List<Course> result = new ArrayList<>();
-        if (student == null || !(student instanceof Student)) {
+    public ArrayList<Course> getCoursesByStudentId(String studentId) {
+        User user = userService.getUserById(studentId);
+        ArrayList<Course> result = new ArrayList<>();
+        if (user == null || !(user instanceof Student student)) {
             return result;
         }
 
-        Student stud = (Student) student;
-        String[] enrolledCourses = stud.getEnrolledCourses();
+        String[] enrolledCourses = student.getEnrolledCourses();
         for (String courseId : enrolledCourses) {
             Course course = getCourseById(courseId);
             if (course != null) {
@@ -56,15 +56,27 @@ public class CourseService {
         return result;
     }
 
+    public Course getCourseByTitle(String title) {
+        for (Course c : courses) {
+            if (c.getTitle().equalsIgnoreCase(title))
+                return c;
+        }
+        return null;
+    }
 
     public Course createCourse(String title, String description, String instructorId) {
-        String courseID = GenerateID.generateCourseId();
+        User user = userService.getUserById(instructorId);
+        if (user == null || !(user instanceof Instructor instructor)) return null;
+
+        String courseID = Utilities.generateCourseId();
         Course newCourse = new Course(courseID, title, description, instructorId);
-        courses.add(newCourse);
-        Instructor instructor = (Instructor) userService.getUserById(instructorId);
+
         instructor.addCourse(courseID);
-        userService.updateUser(instructor);
+
+        courses.add(newCourse);
         saveCourses();
+        userService.updateUser(instructor);
+
         return newCourse;
     }
 
@@ -81,7 +93,7 @@ public class CourseService {
         return false;
     }
 
-    public boolean deleteCourse(String courseId) {
+    public boolean removeCourse(String courseId) {
         Course c = getCourseById(courseId);
         if (c == null) return false;
 
@@ -102,14 +114,30 @@ public class CourseService {
         return true;
     }
 
+    public void updateCourse(Course updatedCourse) {
+        removeCourse(updatedCourse.getCourseId());
+        courses.add(updatedCourse);
+        saveCourses();
+    }
+
+    public Lesson getLessonByTitle(String courseId, String lessonTitle) {
+        Course c = getCourseById(courseId);
+        if(c == null) return null;
+
+        for(Lesson l : c.getLessons()) {
+            if(l.getTitle().equalsIgnoreCase(lessonTitle))
+                return l;
+        }
+        return null;
+    }
+
     public boolean addLesson(String courseId, String title, String content, List<String> resources) {
         Course c = getCourseById(courseId);
         if(c == null) return  false;
 
 
-        String lessonId = GenerateID.generateLessonId();
-        Lesson newLesson = new Lesson(lessonId, title, content);
-        newLesson.setResources(resources);
+        String lessonId = Utilities.generateLessonId();
+        Lesson newLesson = new Lesson(lessonId, title, content, resources);
         c.addLesson(newLesson);
         saveCourses();
 
@@ -119,6 +147,7 @@ public class CourseService {
     public boolean editLesson(String courseId, String lessonId, String newT, String newC) {
         Course c = getCourseById(courseId);
         if(c == null) return false;
+
         Lesson l = c.getLessonById(lessonId);
         if(l == null) return false;
 
@@ -131,21 +160,38 @@ public class CourseService {
 
     }
 
-    public boolean deleteLesson(String courseId, String lessonId) {
+    public boolean editLesson(String courseId, String lessonId, String newT, String newC, String[] newR) {
+        Course c = getCourseById(courseId);
+        if(c == null) return false;
+
+        Lesson l = c.getLessonById(lessonId);
+        if(l == null) return false;
+
+        l.setTitle(newT);
+        l.setContent(newC);
+        l.setResources(Arrays.asList(newR));
+        c.editLesson(l);
+        saveCourses();
+
+        return true;
+
+    }
+
+    public boolean removeLesson(String courseId, String lessonId) {
         Course c = getCourseById(courseId);
         if(c == null) return false;
 
         return c.removeLessonById(lessonId);
     }
 
-    public Lesson[] getLessons(String courseId) {
+    public ArrayList<Lesson> getLessons(String courseId) {
         Course c = getCourseById(courseId);
         if(c == null) return null;
-        return c.getLessons();
+        return new ArrayList<>(Arrays.asList(c.getLessons()));
     }
 
 
-    public Lesson getLesson(String courseId, String lessonId) {
+    public Lesson getLessonById(String courseId, String lessonId) {
         Course c = getCourseById(courseId);
         if(c == null) return null;
         return c.getLessonById(lessonId);
@@ -154,34 +200,28 @@ public class CourseService {
     public boolean enrollStudent(String courseId, String studentId) {
 
         User user = userService.getUserById(studentId);
-        if (!(user instanceof Student)) {
+        if (!(user instanceof Student student)) {
             return false;
         }
-        Student student = (Student) user;
         Course course = getCourseById(courseId);
         if (course == null) {
             return false;
         }
+
         student.enrollCourse(courseId);
         course.enrollStudent(studentId);
+
         userService.updateUser(student);
         saveCourses();
 
         return true;
     }
 
-    public boolean addCourse(Course course) {
-        courses.add(course);
-        saveCourses();
-        return true;
-    }
-
     public boolean unenrollStudent(String courseId, String studentId) {
         User user = userService.getUserById(studentId);
-        if (!(user instanceof Student)) {
+        if (!(user instanceof Student student)) {
             return false;
         }
-        Student student = (Student) user;
         Course course = getCourseById(courseId);
         if(course == null) {
             return false;
@@ -189,8 +229,10 @@ public class CourseService {
 
         course.removeStudent(studentId);
         student.removeCourse(courseId);
+
         userService.updateUser(student);
         saveCourses();
+
         return true;
     }
 
@@ -202,28 +244,13 @@ public class CourseService {
         return course.getEnrolledStudents();
     }
 
-    public boolean addCourse(String title, String description, String instructorId) {
-        User user = userService.getUserById(instructorId);
-        if (user == null || !(user instanceof Instructor)) {
-            return false;
-        }
-        String courseId = GenerateID.generateCourseId();
-
-        Course newCourse = new Course(courseId, title, description, instructorId);
-        courses.add(newCourse);
-        saveCourses();
-        return true;
-    }
-
-
-    public boolean markLessonCompleted(String courseId, String studentId, String lessonId) {
+    public boolean completeLesson(String courseId, String studentId, String lessonId) {
 
         User user = userService.getUserById(studentId);
-        if (user == null || !(user instanceof Student)) {
+        if (user == null || !(user instanceof Student student)) {
             return false;
         }
 
-        Student student = (Student) user;
         student.completeLesson(courseId, lessonId);
         userService.updateUser(student);
 
@@ -231,31 +258,20 @@ public class CourseService {
     }
 
 
-    public boolean isLessonCompleted(String courseId, String studentId, String lessonId) {
-        User u = userService.getUserById(studentId);
-        if (u == null || !(u instanceof Student)) {
-            return false;
+
+    public ArrayList<Lesson> getCompletedLessons(String userId, String courseId) {
+        User user = userService.getUserById(userId);
+        if(!(user instanceof Student student)) return null;
+
+        String[] completedLessonIds = student.getProgress(courseId);
+        ArrayList<Lesson> completedLessons = new ArrayList<>();
+
+        for(String lessonId : completedLessonIds){
+            Lesson lesson = getLessonById(courseId, lessonId);
+            if(lesson != null) completedLessons.add(lesson);
         }
 
-        Student student = (Student) u;
-        String[] completedLessons = student.getProgress(courseId);
-
-        for(String lId : completedLessons) {
-            if (lId.equals(lessonId)) {
-                return true;
-            }
-        }
-        return false ;
-    }
-    public List<String> getCompletedLessons(String courseId, String studentId) {
-        User u = userService.getUserById(studentId);
-        if (u == null || !(u instanceof Student)) {
-            return new ArrayList<>();
-        }
-
-        Student student = (Student) u;
-        String[] completedLessons = student.getProgress(courseId);
-        return Arrays.asList(completedLessons);
+        return completedLessons;
     }
 
 }

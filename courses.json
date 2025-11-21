@@ -1,7 +1,7 @@
 [
   {
-    "description": "dfgh fghddfg hdfg hj",
-    "title": "asfsdf",
+    "description": "dfgh fghddfg hdfg hjjj",
+    "title": "34155",
     "courseId": "C1",
     "instructorId": "1",
     "lessons": [
@@ -29,6 +29,17 @@
         "title": "cxgh",
         "content": "fsgh  fg hfh fg h",
         "resources": []
+      },
+      {
+        "lessonId": "L5",
+        "title": "1234",
+        "content": "1243dsfgdsfg",
+        "resources": [
+          "1",
+          " 1",
+          " 1",
+          " 1"
+        ]
       }
     ],
     "enrolledStudents": [

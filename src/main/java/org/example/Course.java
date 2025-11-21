@@ -65,13 +65,15 @@ public class Course {
             }
         }return null;
     }
-    public boolean editLesson(Lesson updLesson){
-        Lesson lesson = getLessonById(updLesson.getLessonId());
+
+    public boolean editLesson(Lesson updatedLesson){
+        Lesson lesson = getLessonById(updatedLesson.getLessonId());
         if(lesson == null) return false;
         lessons.remove(lesson);
-        lessons.add(updLesson);
+        lessons.add(updatedLesson);
         return true;
     }
+
     boolean removeLessonById(String lessonId) {
         for (Lesson l : lessons) {
             if (l.getLessonId().equals(lessonId)) {

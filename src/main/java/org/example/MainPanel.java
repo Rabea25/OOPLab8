@@ -5,16 +5,23 @@ import java.awt.*;
 
 public class MainPanel extends JFrame {
     private JPanel rootPanel;
-    private UserService svc;
+    private UserService userService;
     private User currentUser;
-    private CourseService csvc;
+    private CourseService courseService;
 
     public MainPanel(){
-        this.svc = new UserService();
-        this.csvc = new CourseService(svc);
+        userService = new UserService();
+        courseService = new CourseService(userService);
+        userService.setCourseService(courseService);
+
         this.setTitle("Student Management System");
         this.setContentPane(rootPanel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(400, 400);
+        this.setLocationRelativeTo(null);
         switchPanel(new LoginPanel(this));
+        this.setVisible(true);
+
     }
 
     public void switchPanel(JPanel panel) {
@@ -26,28 +33,30 @@ public class MainPanel extends JFrame {
     }
 
     public void setCurrentUser(User user) {
+        this.setSize(900, 600);
         this.currentUser = user;
         if(user.getRole().equals("student")){
-            //switchPanel(new StudentDashboardPanel(this, csvc, svc));
+            switchPanel(new StudentDashboard(this));
             System.out.println("Switching to student dashboard for user: " + user.getUsername());
         }
         else{
-            //switchPanel(new InstructorDashboardPanel(this, svc, csvc));
+            switchPanel(new InstructorDashboard(this));
             System.out.println("Switching to instructor dashboard for user: " + user.getUsername());
         }
     }
 
     public void logout(){
+        this.setSize(400, 400);
         this.currentUser = null;
         switchPanel(new LoginPanel(this));
     }
 
     public UserService getUserService() {
-        return svc;
+        return userService;
     }
 
     public CourseService getCourseService() {
-        return csvc;
+        return courseService;
     }
 
     public User getCurrentUser() {
