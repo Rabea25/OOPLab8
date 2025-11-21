@@ -3,6 +3,7 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
+;
 public class Course {
     private String description;
     private String title;
@@ -10,14 +11,16 @@ public class Course {
     private String instructorId;
     private List<Lesson> lessons;
     private List<String> enrolledStudents;
+    private ApprovalStatus approvalStatus;
 
-    public Course(String courseId, String title, String description, String instructorId) {
+    public Course(String courseId, String title, String description, String instructorId , ApprovalStatus approvalStatus) {
         this.courseId = courseId;
         this.title = title;
         this.description = description;
         this.instructorId = instructorId;
         this.lessons = new ArrayList<>();
         this.enrolledStudents = new ArrayList<>();
+        this.approvalStatus  = approvalStatus.PENDING;
     }
 
     public String getCourseId() {
@@ -65,6 +68,9 @@ public class Course {
             }
         }return null;
     }
+
+    public ApprovalStatus getApprovalStatus() {return approvalStatus;}
+    public void setApprovalStatus(ApprovalStatus approvalStatus) {this.approvalStatus = approvalStatus;}
 
     public boolean editLesson(Lesson updatedLesson){
         Lesson lesson = getLessonById(updatedLesson.getLessonId());
