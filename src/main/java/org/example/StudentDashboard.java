@@ -64,7 +64,18 @@ public class StudentDashboard extends JPanel{
         certificatesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                CertificatePanel certificatesPanel = new CertificatePanel(student);
+                JDialog dialog = new JDialog();
+
+                dialog.setContentPane(certificatesPanel.getRootPanel());
+
+                dialog.setModal(true);
+                dialog.pack();
+                dialog.setLocationRelativeTo(null);
+                dialog.setTitle("Your Earned Certificates");
+                dialog.setVisible(true);
             }
+
         });
     }
 

@@ -101,11 +101,48 @@ public class CertificatePanel extends JDialog{
 
     private void viewCertificate(String content, String courseID)
     {
+        JTextArea contentArea = new JTextArea(content);
+        contentArea.setEditable(false);
+        contentArea.setLineWrap(true);
 
+        JScrollPane scrollPane = new JScrollPane(contentArea);
+        scrollPane.setPreferredSize(new Dimension(500, 300));
+
+        JOptionPane.showMessageDialog(rootPanel, scrollPane,"Certificate Content (" + courseID + ")", JOptionPane.PLAIN_MESSAGE);
     }
 
     private void downloadCertificate(String content, String courseID)
     {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Specify a file to save the certificate");
 
+        String defaultFileName = String.format("%s_%s_Certificate.json",
+                currentStudent.getUserId(), courseID);
+        fileChooser.setSelectedFile(new File(defaultFileName));
+
+        int userSelection = fileChooser.showSaveDialog(rootPanel);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+
+            if (!fileToSave.getName().toLowerCase().endsWith(".json")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".json");
+            }
+
+            try (FileWriter writer = new FileWriter(fileToSave)) {
+                writer.write(content);
+                JOptionPane.showMessageDialog(rootPanel,
+                        "Certificate successfully downloaded to:\n" + fileToSave.getAbsolutePath(),
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(rootPanel,
+                        "Error saving file: " + ex.getMessage(),
+                        "Download Failed", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public JPanel getRootPanel() {
+        return rootPanel;
     }
 }
