@@ -8,11 +8,13 @@ public class MainPanel extends JFrame {
     private UserService userService;
     private User currentUser;
     private CourseService courseService;
+    private Analytics analytics;
 
     public MainPanel(){
         userService = new UserService();
         courseService = new CourseService(userService);
         userService.setCourseService(courseService);
+        analytics = new Analytics(userService, courseService);
 
         this.setTitle("Student Management System");
         this.setContentPane(rootPanel);
@@ -62,4 +64,9 @@ public class MainPanel extends JFrame {
     public User getCurrentUser() {
         return currentUser;
     }
+
+    public Analytics getAnalytics() {
+        return analytics;
+    }
+
 }
