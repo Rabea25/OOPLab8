@@ -31,6 +31,8 @@ public class InstructorDashboard extends JPanel{
     private CourseService courseService;
     private Instructor instructor;
     private ArrayList<Course> courses;
+    private JButton viewInsightsButton;
+    private Analytics analytics;
 
     public InstructorDashboard(MainPanel mainPanel) {
         this.setLayout(new BorderLayout());
@@ -57,6 +59,7 @@ public class InstructorDashboard extends JPanel{
         editLessonButton.addActionListener(e -> editLesson());
         editCourseButton.addActionListener(e -> editCourse());
         addCourseButton.addActionListener(e -> addCourse());
+        viewInsightsButton.addActionListener(e -> viewInsights());
 
         lessonsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -226,4 +229,14 @@ public class InstructorDashboard extends JPanel{
         quizTitle.setText("Title: "+quiz.getTitle());
         questionsNo.setText("Questions: "+String.valueOf(quiz.getNumberOfQuestions()));
     }
+
+    private void viewInsights() {
+        if(!coursesComboBox.isEnabled() || coursesComboBox.getSelectedIndex() < 0 || coursesComboBox.getSelectedIndex() >= courses.size()){
+            JOptionPane.showMessageDialog(root, "Please select a course to view insights.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Course selectedCourse = courses.get(coursesComboBox.getSelectedIndex());
+        new InsightsDialog(null, selectedCourse, analytics, courseService, userService);
+    }
+
 }
