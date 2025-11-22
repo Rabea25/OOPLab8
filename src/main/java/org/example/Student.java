@@ -7,6 +7,8 @@ public class Student extends User{
     ArrayList<String> enrolledCourses = new ArrayList<>();
     Map<String, ArrayList<String>> progress;
     ArrayList<QuizAttempt> quizAttempts = new ArrayList<>();
+    private ArrayList<Certificates> earnedCertificates = new ArrayList<>(); //certification addition
+
     public Student(String userId, String role, String username, String email, String passwordHash) {
         super(userId, role, username, email, passwordHash);
         progress = new java.util.HashMap<>();
@@ -48,6 +50,17 @@ public class Student extends User{
         }
         return attemptsForLesson;
     }
+
+    public ArrayList<Certificates> getEarnedCertificates () {return earnedCertificates; }
+
+    public void addCertificate(Certificates certificate)
+    {
+        if(certificate != null) this.earnedCertificates.add(certificate);
+    }
+
+
+
+
 
 
 }

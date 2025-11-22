@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -26,6 +28,7 @@ public class StudentDashboard extends JPanel{
     private JTextArea resoucresArea;
     private JLabel titleLabel2;
     private JButton viewَQuizAttemptsButton;
+    private JButton certificatesButton;
     private Student student;
     private ArrayList<Course> courses;
     private CourseService courseService;
@@ -58,6 +61,11 @@ public class StudentDashboard extends JPanel{
             }
         });
         refresh();
+        certificatesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
     }
 
     private void refresh(){
