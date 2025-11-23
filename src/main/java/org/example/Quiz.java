@@ -65,14 +65,14 @@ public class Quiz {
         return title;
     }
     public String getLessonId(){return lessonId;}
-    public int getQuizGrade(ArrayList<Integer> userAnswers){
+    public int getQuizGrade(int[] userAnswers){
         int x = 0;
-        for(int i=0; i<answers.size(); i++) x += (Objects.equals(answers.get(i), userAnswers.get(i))) ? 1 : 0;
+        for(int i=0; i<answers.size(); i++) x += (Objects.equals(answers.get(i), userAnswers[i])) ? 1 : 0;
         return x;
     }
-    public ArrayList<Integer> getQuizcorrection(ArrayList<Integer> userAnswers){
+    public ArrayList<Integer> getQuizcorrection(int[] userAnswers){
         ArrayList<Integer> correction = new ArrayList<>();
-        for(int i=0; i<answers.size(); i++) correction.add( (Objects.equals(answers.get(i), userAnswers.get(i))) ? 1 : 0);
+        for(int i=0; i<answers.size(); i++) correction.add( (Objects.equals(answers.get(i), userAnswers[i])) ? 1 : 0);
         return correction;
     }
 

@@ -8,11 +8,13 @@ public class MainPanel extends JFrame {
     private UserService userService;
     private User currentUser;
     private CourseService courseService;
+    private Analytics analytics;
 
     public MainPanel(){
         userService = new UserService();
         courseService = new CourseService(userService);
         userService.setCourseService(courseService);
+        analytics = new Analytics(userService, courseService);
 
         this.setTitle("Student Management System");
         this.setContentPane(rootPanel);
@@ -34,14 +36,18 @@ public class MainPanel extends JFrame {
 
     public void setCurrentUser(User user) {
         this.setSize(900, 600);
+        this.setLocationRelativeTo(null);
         this.currentUser = user;
         if(user.getRole().equals("student")){
             switchPanel(new StudentDashboard(this));
             System.out.println("Switching to student dashboard for user: " + user.getUsername());
         }
-        else{
+        else if(user.getRole().equals("instructor")){
             switchPanel(new InstructorDashboard(this));
             System.out.println("Switching to instructor dashboard for user: " + user.getUsername());
+        }
+        else{
+
         }
     }
 
@@ -62,4 +68,9 @@ public class MainPanel extends JFrame {
     public User getCurrentUser() {
         return currentUser;
     }
+
+    public Analytics getAnalytics() {
+        return analytics;
+    }
+
 }

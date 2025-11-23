@@ -1,15 +1,23 @@
 package org.example;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 
 public class Student extends User{
-    ArrayList<String> enrolledCourses = new ArrayList<>();
-    Map<String, ArrayList<String>> progress;
-    ArrayList<QuizAttempt> quizAttempts = new ArrayList<>();
+    private ArrayList<String> enrolledCourses;
+    private Map<String, ArrayList<String>> progress;
+    private ArrayList<QuizAttempt> quizAttempts;
+    @Expose
+    private ArrayList<Certificates> earnedCertificates = new ArrayList<>(); //certification addition
+
     public Student(String userId, String role, String username, String email, String passwordHash) {
         super(userId, role, username, email, passwordHash);
-        progress = new java.util.HashMap<>();
+        this.progress = new java.util.HashMap<>();
+        this.quizAttempts = new ArrayList<>();
+        this.enrolledCourses = new ArrayList<>();
     }
 
     public void enrollCourse(String courseId) {
@@ -27,6 +35,7 @@ public class Student extends User{
     }
     public void removeCourse(String courseId) {
         enrolledCourses.remove(courseId);
+        progress.remove(courseId);
     }
     public String[] getProgress(String courseId) {
         ArrayList<String> completedLessons = progress.get(courseId);
@@ -46,8 +55,21 @@ public class Student extends User{
                 attemptsForLesson.add(attempt);
             }
         }
+        attemptsForLesson.sort(Comparator.comparingInt(QuizAttempt::getAttemptNumber));
         return attemptsForLesson;
     }
+    public void removeQuizAttemptsByLessonId(String lessonId){
+        ArrayList<QuizAttempt> e = getQuizAttemptsbyLessonId(lessonId);
+        for(QuizAttempt qa : e){
+            quizAttempts.remove(qa);
+        }
+    }
 
+    public ArrayList<Certificates> getEarnedCertificates () {return earnedCertificates; }
+
+    public void addCertificate(Certificates certificate)
+    {
+        if(certificate != null) this.earnedCertificates.add(certificate);
+    }
 
 }

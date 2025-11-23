@@ -44,6 +44,7 @@ public class AddLessonDialog extends JDialog{
         courseLabel.setText(course.getCourseId());
         cancelButton.addActionListener(e -> dispose());
         saveButton.addActionListener(e -> {
+            saveCurrentQuestion("fwd");
             String title  = titleField.getText().trim();
             String content = contentField.getText().trim();
             String qTitle = qTitleField.getText().trim();
