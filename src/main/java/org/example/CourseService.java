@@ -243,7 +243,7 @@ public class CourseService {
 
         course.removeStudent(studentId);
         student.removeCourse(courseId);
-
+        student.removeCertificate(courseId);
         userService.updateUser(student);
         saveCourses();
 

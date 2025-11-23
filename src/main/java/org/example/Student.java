@@ -71,5 +71,18 @@ public class Student extends User{
     {
         if(certificate != null) this.earnedCertificates.add(certificate);
     }
+    public void removeCertificate(String courseId)
+    {
+        Certificates toRemove = null;
+        for(Certificates certificate : this.earnedCertificates)
+        {
+            if(certificate.getCourseID().equals(courseId))
+            {
+                toRemove = certificate;
+                break;
+            }
+        }
+        if(toRemove != null) this.earnedCertificates.remove(toRemove);
+    }
 
 }

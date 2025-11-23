@@ -158,5 +158,14 @@
       "S3"
     ],
     "approvalStatus": "APPROVED"
+  },
+  {
+    "description": "yhgvryhtyhyh",
+    "title": "jgb yhn",
+    "courseId": "C4",
+    "instructorId": "1",
+    "lessons": [],
+    "enrolledStudents": [],
+    "approvalStatus": "PENDING"
   }
 ]
