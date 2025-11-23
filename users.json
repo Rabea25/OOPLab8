@@ -32,9 +32,17 @@
     "passwordHash": "2122ca189dc9713f17b1a3b66501028983cb9defb253362465811d46535913b9"
   },
   {
+    "userId": "A1",
+    "role": "admin",
+    "username": "John Doe",
+    "email": "3",
+    "passwordHash": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"
+  },
+  {
     "createdCourses": [
       "C1",
-      "C2"
+      "C2",
+      "C3"
     ],
     "userId": "1",
     "role": "instructor",
@@ -45,7 +53,8 @@
   {
     "enrolledCourses": [
       "C2",
-      "C1"
+      "C1",
+      "C3"
     ],
     "progress": {
       "C2": [
@@ -54,7 +63,8 @@
       "C1": [
         "L11",
         "L12"
-      ]
+      ],
+      "C3": []
     },
     "quizAttempts": [
       {
@@ -201,6 +211,13 @@
         "courseID": "C1",
         "issueDate": "2025-11-23",
         "certificateContent": "{\n  \"certificateID\": \"CERT-06d6fb9f\",\n  \"recipientName\": \"STUDENT RABE3\",\n  \"courseTitle\": \"34155\",\n  \"issueDate\": \"2025-11-23\"\n}"
+      },
+      {
+        "certificateID": "CERT-7c3e76f6",
+        "studentID": "S3",
+        "courseID": "C3",
+        "issueDate": "2025-11-24",
+        "certificateContent": "{\n  \"certificateID\": \"CERT-7c3e76f6\",\n  \"recipientName\": \"STUDENT RABE3\",\n  \"courseTitle\": \"aaaag\",\n  \"issueDate\": \"2025-11-24\"\n}"
       }
     ],
     "userId": "S3",

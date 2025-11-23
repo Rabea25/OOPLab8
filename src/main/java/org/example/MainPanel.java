@@ -47,7 +47,7 @@ public class MainPanel extends JFrame {
             System.out.println("Switching to instructor dashboard for user: " + user.getUsername());
         }
         else{
-
+            switchPanel(new AdminDashboard(this));
         }
     }
 

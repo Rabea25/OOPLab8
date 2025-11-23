@@ -179,18 +179,8 @@ public class StudentDashboard extends JPanel{
             return;
         }
 
-
         attemptQuiz();
-
-//        boolean pass = false, success = false;
-//
-//        if(pass) success = courseService.completeLesson(courses.get(coursesComboBox.getSelectedIndex()).getCourseId(), student.getUserId(), (String) lessonsTable.getValueAt(selectedRow, 0));
-//        if(success){
-//            JOptionPane.showMessageDialog(this, "Quiz passed and lesson complete.", "Success", JOptionPane.INFORMATION_MESSAGE);
-//            updateLessonsTable();
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Quiz failed, lesson is incomplete.", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
+        updateLessonsTable();
     }
     public void updateLessonDetails(){
         int selectedRow = lessonsTable.getSelectedRow();

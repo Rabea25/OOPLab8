@@ -25,8 +25,8 @@ public class UserService {
 
         User newUser;
         if(role.equals("student")) newUser = new Student(Utilities.generateStudentId(), "student",  username, email, passwordHash);
-        else newUser = new Instructor(Utilities.generateInstructorId(), "instructor", username, email, passwordHash);
-
+        else if(role.equals("instructor")) newUser = new Instructor(Utilities.generateInstructorId(), "instructor", username, email, passwordHash);
+        else newUser = new Admin(Utilities.generateAdminId(), "admin", username, email, passwordHash);
         users.add(newUser);
         saveUsers();
         return newUser;
@@ -90,9 +90,6 @@ public class UserService {
         if(course != null) return new ArrayList<>(Arrays.asList(course.getLessons()));
         return null;
     }
-
-
-
 
     public void saveUsers() {
         JsonDatabaseManager.writeUsers(users);

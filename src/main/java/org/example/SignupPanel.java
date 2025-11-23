@@ -15,6 +15,7 @@ public class SignupPanel extends JPanel{
     private JPasswordField passwordField;
     private JRadioButton instructorRadioButton;
     private JRadioButton studentRadioButton;
+    private JRadioButton adminRadioButton;
     private UserService svc;
     private ButtonGroup role;
 
@@ -26,8 +27,10 @@ public class SignupPanel extends JPanel{
         role = new ButtonGroup();
         role.add(instructorRadioButton);
         role.add(studentRadioButton);
+        role.add(adminRadioButton);
         instructorRadioButton.setActionCommand("instructor");
         studentRadioButton.setActionCommand("student");
+        adminRadioButton.setActionCommand("admin");
         studentRadioButton.setSelected(true);
 
 

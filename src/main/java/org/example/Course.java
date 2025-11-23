@@ -67,7 +67,9 @@ public class Course {
         }return null;
     }
 
-    public ApprovalStatus getApprovalStatus() {return approvalStatus;}
+    public ApprovalStatus getApprovalStatus() {
+        return approvalStatus;
+    }
     public void setApprovalStatus(ApprovalStatus approvalStatus) {this.approvalStatus = approvalStatus;}
 
     public boolean editLesson(Lesson updatedLesson){

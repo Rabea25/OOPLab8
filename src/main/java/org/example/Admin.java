@@ -3,14 +3,9 @@ package org.example;
 import java.util.List;
 
 public class Admin extends User {
-    String id;
-    String role;
-    String username;
-    String email;
-    String Password;
 
-    public Admin(String id, String role, String username, String email, String Password) {
-        super(id, role, username, email, "ADMIN:");
+    public Admin(String id, String role, String username, String email, String passwordHash) {
+        super(id, role, username, email, passwordHash);
     }
 
     public List<Course> getPendingCourses(CourseService courseService) {

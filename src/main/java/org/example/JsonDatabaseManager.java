@@ -21,6 +21,7 @@ public class JsonDatabaseManager {
 
                 if(o.get("role").getAsString().equals("student")) users.add(gson.fromJson(o, Student.class));
                 else if(o.get("role").getAsString().equals("instructor")) users.add(gson.fromJson(o, Instructor.class));
+                else users.add(gson.fromJson(o, Admin.class));
 
             }
         } catch (Exception e) {

@@ -91,7 +91,8 @@
     "enrolledStudents": [
       "S2",
       "S3"
-    ]
+    ],
+    "approvalStatus": "APPROVED"
   },
   {
     "description": "dfghj fdg hdfg hfg hdfg hdhfg",
@@ -144,6 +145,18 @@
     ],
     "enrolledStudents": [
       "S3"
-    ]
+    ],
+    "approvalStatus": "APPROVED"
+  },
+  {
+    "description": "aaaaaaaaaa",
+    "title": "aaaag",
+    "courseId": "C3",
+    "instructorId": "1",
+    "lessons": [],
+    "enrolledStudents": [
+      "S3"
+    ],
+    "approvalStatus": "APPROVED"
   }
 ]

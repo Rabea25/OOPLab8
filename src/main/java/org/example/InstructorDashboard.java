@@ -85,7 +85,7 @@ public class InstructorDashboard extends JPanel{
             return;
         }
         coursesComboBox.setEnabled(true);
-        for(Course course : courses) coursesComboBox.addItem(course.getCourseId() + " : " + course.getTitle());
+        for(Course course : courses) coursesComboBox.addItem(course.getCourseId() + " : " + course.getTitle() + (course.getApprovalStatus()!=ApprovalStatus.APPROVED ? " ["+course.getApprovalStatus().toString()+"]": ""));
         coursesComboBox.setSelectedIndex(0);
 
     }
@@ -178,6 +178,9 @@ public class InstructorDashboard extends JPanel{
         Lesson lesson = courseService.getLessonById(course.getCourseId(), lessonId);
         EditLessonDialog editPanel = new EditLessonDialog(lesson, courseService, course);
         if(editPanel.isSaved()) {
+            if(course.getApprovalStatus() == ApprovalStatus.REJECTED){
+                courseService.resubmitCourse(course.getCourseId());
+            }
             updateLessonsTable();
         }
     }
@@ -189,6 +192,9 @@ public class InstructorDashboard extends JPanel{
         Course selectedCourse = courses.get(coursesComboBox.getSelectedIndex());
         EditCourseDialog editPanel = new EditCourseDialog(selectedCourse,(Instructor)(userService.getUserById(selectedCourse.getInstructorId())),courseService);
         if(editPanel.isSaved()){
+            if(selectedCourse.getApprovalStatus() == ApprovalStatus.REJECTED){
+                courseService.resubmitCourse(selectedCourse.getCourseId());
+            }
             refresh();
         }
 
@@ -201,6 +207,9 @@ public class InstructorDashboard extends JPanel{
         Course selectedCourse = courses.get(coursesComboBox.getSelectedIndex());
         AddLessonDialog addLessonDialog = new AddLessonDialog(selectedCourse, courseService);
         if(addLessonDialog.isSaved()){
+            if(selectedCourse.getApprovalStatus() == ApprovalStatus.REJECTED){
+                courseService.resubmitCourse(selectedCourse.getCourseId());
+            }
             refresh();
         }
     }

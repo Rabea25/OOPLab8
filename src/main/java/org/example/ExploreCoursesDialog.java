@@ -16,7 +16,7 @@ public class ExploreCoursesDialog extends JDialog {
     public ExploreCoursesDialog(Student student, CourseService courseService) {
 
         List<String> enrolledCourses = List.of(student.getEnrolledCourses());
-        Course[] allCourses = courseService.getAllCourses();
+        List<Course> allCourses = courseService.getApprovedCourses();
         ArrayList<Course> availableCourses = new ArrayList<>();
         for(Course course : allCourses){
             if(!enrolledCourses.contains(course.getCourseId())) availableCourses.add(course);

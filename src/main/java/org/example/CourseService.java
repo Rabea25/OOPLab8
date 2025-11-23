@@ -66,7 +66,7 @@ public class CourseService {
 
     public Course submitCourseForApproval(String title, String description, String instructorId) {
         User user = userService.getUserById(instructorId);
-        if (user == null || !(user instanceof Instructor instructor)) return null;
+        if (!(user instanceof Instructor instructor)) return null;
         String courseID = Utilities.generateCourseId();
         Course newcourse = new Course(courseID, title, description, instructorId, ApprovalStatus.PENDING);
 
@@ -81,9 +81,6 @@ public class CourseService {
     public boolean editCourse(String courseId, String newT, String newDes) {
         for (Course c : courses) {
             if (c.getCourseId().equals(courseId)) {
-                if (!canEditCourse(c,c.getInstructorId())){
-                    return false;
-                }
                 c.setTitle(newT);
                 c.setDescription(newDes);
 
@@ -181,18 +178,10 @@ public class CourseService {
 
     public void deleteQuizRecords(String courseId, String lessonId){
         Course c = getCourseById(courseId);
-        if (c == null) return false;
+        if (c == null) return;
 
         Lesson l = c.getLessonById(lessonId);
-        if (l == null) return false;
-
-        l.setTitle(newT);
-        l.setContent(newC);
-        l.setResources(Arrays.asList(newR));
-        c.editLesson(l);
-        saveCourses();
-
-        return true;
+        if (l == null) return;
 
         Lesson lesson = getLessonById(courseId, lessonId);
         for(String studentId : c.getEnrolledStudents()){
@@ -306,11 +295,27 @@ public class CourseService {
     public List<Course> getPendingCourses() {
         List<Course> pendingCourses = new ArrayList<>();
         for (Course c : courses) {
-            if (c.getApprovalStatus().equals("PENDING")) {
+            if (c.getApprovalStatus()==ApprovalStatus.PENDING) {
                 pendingCourses.add(c);
             }
         }
         return pendingCourses;
+    }
+
+    public List<Course> getOtherCourses(){
+        List<Course> o = new ArrayList<>();
+        for(Course c : courses) if(c.getApprovalStatus()!=ApprovalStatus.PENDING) o.add(c);
+        return o;
+    }
+
+    public List<Course> getApprovedCourses(){
+        List<Course> approvedCourses = new ArrayList<>();
+        for (Course c : courses) {
+            if (c.getApprovalStatus()==ApprovalStatus.APPROVED) {
+                approvedCourses.add(c);
+            }
+        }
+        return approvedCourses;
     }
 
     public void approveCourse(String courseId) {
@@ -326,7 +331,7 @@ public class CourseService {
             c.setApprovalStatus(ApprovalStatus.REJECTED);
         }
     }
-public boolean canEditCourse(Course course ,String instructorId){return course.getInstructorId().equals(instructorId) && course.getApprovalStatus() == ApprovalStatus.APPROVED;}
+    public boolean canEditCourse(Course course ,String instructorId){return course.getInstructorId().equals(instructorId) && course.getApprovalStatus() == ApprovalStatus.APPROVED;}
 
     public void attemptQuiz(Student student, Lesson lesson, Course course, int[] answers){
         Quiz quiz = lesson.getQuiz();
@@ -338,6 +343,14 @@ public boolean canEditCourse(Course course ,String instructorId){return course.g
         }
         userService.updateUser(student);
 
+    }
+
+    public void resubmitCourse(String courseId){
+        Course c = getCourseById(courseId);
+        if(c != null){
+            c.setApprovalStatus(ApprovalStatus.PENDING);
+            saveCourses();
+        }
     }
 
 }

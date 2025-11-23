@@ -86,4 +86,20 @@ public class Utilities {
             return 0;
         }
     }
+
+    public static String generateAdminId() {
+        List<User> students = JsonDatabaseManager.loadUsers();
+        int max = 0;
+        for (User u : students){
+            if (u instanceof Admin) {
+                String ID = u.getUserId();
+                int number = extractNumber(ID);
+                if (number > max){
+                    max = number;
+                }
+            }
+        }
+        return "A" + (max + 1);
+
+    }
 }

@@ -29,7 +29,7 @@ public class AddCourseDialog extends JDialog{
                 return;
             }
 
-            if(courseService.editCourse(Utilities.generateCourseId(), title, description)) {
+            if(courseService.submitCourseForApproval(title, description, instructor.getUserId())!=null) {
                 JOptionPane.showMessageDialog(root, "Course saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 saved = true;
                 dispose();
