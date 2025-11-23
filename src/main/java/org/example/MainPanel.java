@@ -36,14 +36,18 @@ public class MainPanel extends JFrame {
 
     public void setCurrentUser(User user) {
         this.setSize(900, 600);
+        this.setLocationRelativeTo(null);
         this.currentUser = user;
         if(user.getRole().equals("student")){
             switchPanel(new StudentDashboard(this));
             System.out.println("Switching to student dashboard for user: " + user.getUsername());
         }
-        else{
+        else if(user.getRole().equals("instructor")){
             switchPanel(new InstructorDashboard(this));
             System.out.println("Switching to instructor dashboard for user: " + user.getUsername());
+        }
+        else{
+
         }
     }
 

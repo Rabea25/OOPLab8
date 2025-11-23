@@ -2,12 +2,11 @@ package org.example;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class InsightsDialog extends JDialog {
-    private JPanel rootPanel;
+    private JPanel root;
     private JTabbedPane tabbedPane;
     private JPanel overviewPanel;
     private JPanel studentPerformancePanel;
@@ -34,9 +33,9 @@ public class InsightsDialog extends JDialog {
         this.analytics = analytics;
         this.courseService = courseService;
         this.userService = userService;
-        this.setContentPane(rootPanel);
+        this.setContentPane(root);
         this.setSize(800, 600);
-        this.setLocationRelativeTo(parent);
+        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         initializeData();
         setupListeners();
@@ -142,7 +141,7 @@ public class InsightsDialog extends JDialog {
     private void showStudentCompletionChart() {
         List<String> enrolledStudentIds = courseService.getEnrolledStudents(course.getCourseId());
         if (enrolledStudentIds == null || enrolledStudentIds.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No students to show", "Info", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(root, "No students to show", "Info", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         ArrayList<String> labels = new ArrayList<>();

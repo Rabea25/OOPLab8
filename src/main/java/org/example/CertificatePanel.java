@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CertificatePanel extends JDialog{
-    private JPanel rootPanel;
+    private JPanel root;
     private JTable certTable;
     private JButton backButton;
 
@@ -26,12 +26,21 @@ public class CertificatePanel extends JDialog{
         DoubleClickListener();
 
         backButton.addActionListener(e -> this.dispose());
+
+        this.setModal(true);
+        this.setContentPane(root);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setTitle("Your Earned Certificates");
+        this.setVisible(true);
     }
 
     private void loadTableData()
     {
         String[] cols = {"Course ID", "Issue Date", "Certificate ID"};
         ArrayList<Certificates> certificates = currentStudent.getEarnedCertificates();
+        System.out.println("Earned :" + certificates.size());
+
         Object[][] data = new Object[certificates.size()][3];
 
         for(int i = 0; i<certificates.size(); i++)
@@ -42,13 +51,10 @@ public class CertificatePanel extends JDialog{
             data[i][2] = cert.getCertificateID();
         }
 
-        tableModel = new DefaultTableModel(data, cols)
-        {
+        certTable.setModel(new DefaultTableModel(data, cols){
+            @Override
             public boolean isCellEditable(int row, int column) {return false;}
-        };
-
-        certTable.setModel(tableModel);
-        certTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        });
     }
 
     private void DoubleClickListener()
@@ -67,7 +73,8 @@ public class CertificatePanel extends JDialog{
 
     private void viewDownload(int selectedRow)
     {
-        if(currentStudent.getEarnedCertificates().isEmpty()) return;
+        if(currentStudent.getEarnedCertificates().isEmpty())
+            return;
 
         try
         {
@@ -78,7 +85,7 @@ public class CertificatePanel extends JDialog{
             Object[] options = {"View", "Download", "Cancel"};
 
             int choice = JOptionPane.showOptionDialog(
-                    rootPanel,
+                    root,
                     "Select your option for this course: " + courseID,
                     "Certificate Choice",
                     JOptionPane.YES_NO_CANCEL_OPTION,
@@ -95,7 +102,7 @@ public class CertificatePanel extends JDialog{
             }
         } catch (IndexOutOfBoundsException e)
         {
-            JOptionPane.showMessageDialog(rootPanel, "Unable to retrieve certificate details.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(root, "Unable to retrieve certificate details.", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -108,7 +115,7 @@ public class CertificatePanel extends JDialog{
         JScrollPane scrollPane = new JScrollPane(contentArea);
         scrollPane.setPreferredSize(new Dimension(500, 300));
 
-        JOptionPane.showMessageDialog(rootPanel, scrollPane,"Certificate Content (" + courseID + ")", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(root, scrollPane,"Certificate Content (" + courseID + ")", JOptionPane.PLAIN_MESSAGE);
     }
 
     private void downloadCertificate(String content, String courseID)
@@ -116,11 +123,10 @@ public class CertificatePanel extends JDialog{
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Specify a file to save the certificate");
 
-        String defaultFileName = String.format("%s_%s_Certificate.json",
-                currentStudent.getUserId(), courseID);
+        String defaultFileName = String.format("%s_%s_Certificate.json", currentStudent.getUserId(), courseID);
         fileChooser.setSelectedFile(new File(defaultFileName));
 
-        int userSelection = fileChooser.showSaveDialog(rootPanel);
+        int userSelection = fileChooser.showSaveDialog(root);
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
@@ -131,18 +137,15 @@ public class CertificatePanel extends JDialog{
 
             try (FileWriter writer = new FileWriter(fileToSave)) {
                 writer.write(content);
-                JOptionPane.showMessageDialog(rootPanel,
+                JOptionPane.showMessageDialog(root,
                         "Certificate successfully downloaded to:\n" + fileToSave.getAbsolutePath(),
                         "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(rootPanel,
+                JOptionPane.showMessageDialog(root,
                         "Error saving file: " + ex.getMessage(),
                         "Download Failed", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    public JPanel getRootPanel() {
-        return rootPanel;
-    }
 }

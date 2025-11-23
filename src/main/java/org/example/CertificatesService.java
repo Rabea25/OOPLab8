@@ -6,33 +6,19 @@ import java.util.UUID;
 
 public class CertificatesService {
 
-    public Certificates checkAndIssueCertificate(Student student, Course course)
+    public static Certificates checkAndIssueCertificate(Student student, Course course, UserService userService)
     {
         if(isAlreadyIssued(student, course.getCourseId())) { return null;}
 
-        if(verifyCourseCompletion(student, course))
-        {
-            String certID = "CERT-" + UUID.randomUUID().toString().substring(0,8); //aashan a genrate random ID
-            String content = generateCertificateContent(student, course, certID);
+        String certID = "CERT-" + UUID.randomUUID().toString().substring(0,8); //aashan a genrate random ID
+        String content = generateCertificateContent(student, course, certID);
 
-            Certificates newCertificate = new Certificates(certID, student.getUserId(), course.getCourseId(), content);
+        Certificates newCertificate = new Certificates(certID, student.getUserId(), course.getCourseId(), content);
 
-            student.addCertificate(newCertificate);
+        student.addCertificate(newCertificate);
+        userService.updateUser(student);
 
-            List<User> allUsers = JsonDatabaseManager.loadUsers();
-            for(int i=0; i <allUsers.size(); i++)
-            {
-                if (allUsers.get(i).getUserId().equals(student.getUserId()))
-                {
-                    allUsers.set(i,student);
-                    break;
-                }
-            }
-            JsonDatabaseManager.writeUsers(allUsers);
-
-            return newCertificate;
-        }
-        return null;
+        return newCertificate;
     }
 
     private boolean verifyCourseCompletion(Student student, Course course)
@@ -66,7 +52,8 @@ public class CertificatesService {
     {
         return String.format(
                 "{\n" +
-                        "  \"certificateID\": \"%s\",\n" + "  \"recipientName\": \"%s\",\n" +
+                        "  \"certificateID\": \"%s\",\n" +
+                        "  \"recipientName\": \"%s\",\n" +
                         "  \"courseTitle\": \"%s\",\n" +
                         "  \"issueDate\": \"%s\"\n" +
                         "}",
@@ -77,7 +64,7 @@ public class CertificatesService {
         );
     }
 
-    private boolean isAlreadyIssued(Student student, String courseID)
+    private static boolean isAlreadyIssued(Student student, String courseID)
     {
         ArrayList<Certificates> earned = student.getEarnedCertificates();
         for (Certificates cert : earned)

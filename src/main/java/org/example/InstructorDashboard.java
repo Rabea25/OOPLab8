@@ -26,7 +26,6 @@ public class InstructorDashboard extends JPanel{
     private JPanel quizPanel;
     private JLabel questionsNo;
     private JLabel quizTitle;
-    private JButton editQuizButton;
     private UserService userService;
     private CourseService courseService;
     private Instructor instructor;
@@ -40,6 +39,7 @@ public class InstructorDashboard extends JPanel{
         this.userService = mainPanel.getUserService();
         this.courseService = mainPanel.getCourseService();
         this.instructor = (Instructor) mainPanel.getCurrentUser();
+        this.analytics = new Analytics(userService, courseService);
 
         splitPane.setDividerLocation(0.5);
         instructorLabel.setText(instructor.getUsername());

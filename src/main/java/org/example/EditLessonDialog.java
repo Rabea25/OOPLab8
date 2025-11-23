@@ -61,9 +61,11 @@ public class EditLessonDialog extends JDialog{
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                saveCurrentQuestion("fwd");
                 String title  = titleField.getText().trim();
                 String content = contentField.getText().trim();
                 String[] res = resourceField.getText().trim().split(",");
+                String qTitle = qTitleField.getText().trim();
 
                 Lesson b = courseService.getLessonByTitle(course.getCourseId(), title);
 
@@ -76,7 +78,8 @@ public class EditLessonDialog extends JDialog{
                     return;
                 }
 
-                if(courseService.editLesson(course.getCourseId(), lesson.getLessonId(), title, content, res)) {
+                if(courseService.editLesson(course.getCourseId(), lesson.getLessonId(), title, content, res, qTitle, questions, options, answers)) {
+
                     JOptionPane.showMessageDialog(root, "Lesson saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     saved = true;
                     dispose();
@@ -121,6 +124,7 @@ public class EditLessonDialog extends JDialog{
     }
 
     public boolean saveCurrentQuestion(String dir){
+
         String[] opts = new String[4];
         opts[0] = choice1Field.getText().trim();
         opts[1] = choice2Field.getText().trim();
@@ -131,10 +135,12 @@ public class EditLessonDialog extends JDialog{
         if(Objects.equals(dir, "rev") && currentQuestionIndex==questions.size() && qtitle.isEmpty() && opts[0].isEmpty() && opts[1].isEmpty() && opts[2].isEmpty() && opts[3].isEmpty()){
             return true;
         }
+
         if(((Objects.equals(dir, "rev") && currentQuestionIndex<questions.size()) || (Objects.equals(dir, "fwd"))) && (opts[0].isEmpty() || opts[1].isEmpty() || opts[2].isEmpty() || opts[3].isEmpty() || qtitle.isEmpty())){
             JOptionPane.showMessageDialog(root, "All question fields must be not empty.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+
 
         int selectedAnswer = 0;
         if(choice2RadioButton.isSelected()) selectedAnswer = 1;

@@ -4,12 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ChartFrame extends JFrame {
+public class ChartFrame extends JDialog {
     private ArrayList<String> labels;
     private ArrayList<Double> values;
     private String chartTitle;
     private String xLabel;
     private String yLabel;
+    private JPanel root;
 
     public ChartFrame(ArrayList<String> labels, ArrayList<Double> values, String title, String xLabel, String yLabel) {
         this.labels = labels;
@@ -17,12 +18,16 @@ public class ChartFrame extends JFrame {
         this.chartTitle = title;
         this.xLabel = xLabel;
         this.yLabel = yLabel;
-        this.setTitle(title);
-        this.setSize(800, 600);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setLocationRelativeTo(null);
+
         ChartPanel chartPanel = new ChartPanel();
-        this.add(chartPanel);
+        //this.add(chartPanel);
+        this.setTitle(title);
+        this.setContentPane(chartPanel);
+        this.setModal(true);
+        this.pack();
+        this.setSize(500, 500);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
 

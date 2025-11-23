@@ -158,15 +158,19 @@ public class CourseService {
         return lessonId;
     }
 
-    public boolean editLesson(String courseId, String lessonId, String newT, String newC) {
+
+    public boolean editLesson(String courseId, String lessonId, String newT, String newC, String[] newR, String qtitle, ArrayList<String> questions, ArrayList<String[]> options, ArrayList<Integer> answers) {
         Course c = getCourseById(courseId);
         if(c == null) return false;
 
         Lesson l = c.getLessonById(lessonId);
         if(l == null) return false;
 
+        deleteQuizRecords(courseId, lessonId);
         l.setTitle(newT);
         l.setContent(newC);
+        l.setResources(Arrays.asList(newR));
+        l.updateQuiz(qtitle, questions, options, answers);
         c.editLesson(l);
         saveCourses();
 
@@ -174,21 +178,15 @@ public class CourseService {
 
     }
 
-    public boolean editLesson(String courseId, String lessonId, String newT, String newC, String[] newR) {
+    public void deleteQuizRecords(String courseId, String lessonId){
         Course c = getCourseById(courseId);
-        if(c == null) return false;
+        if(c==null) return;
 
-        Lesson l = c.getLessonById(lessonId);
-        if(l == null) return false;
-
-        l.setTitle(newT);
-        l.setContent(newC);
-        l.setResources(Arrays.asList(newR));
-        c.editLesson(l);
-        saveCourses();
-
-        return true;
-
+        Lesson lesson = getLessonById(courseId, lessonId);
+        for(String studentId : c.getEnrolledStudents()){
+            ((Student) userService.getUserById(studentId)).removeQuizAttemptsByLessonId(lessonId);
+        }
+        userService.saveUsers();
     }
 
     public boolean removeLesson(String courseId, String lessonId) {
@@ -293,6 +291,18 @@ public class CourseService {
     public Quiz getQuiz(String lessonId, String courseId){
         Lesson lesson = getLessonById(courseId, lessonId);
         return lesson.getQuiz();
+    }
+
+    public void attemptQuiz(Student student, Lesson lesson, Course course, int[] answers){
+        Quiz quiz = lesson.getQuiz();
+        int attemptNumber = student.getQuizAttemptsbyLessonId(lesson.getLessonId()).size();
+        QuizAttempt qa = new QuizAttempt(lesson.getLessonId(), course.getCourseId(), quiz.getQuizGrade(answers), answers, attemptNumber);
+        student.addQuizAttempt(qa);
+        if(qa.isPassed()){
+            student.completeLesson(course.getCourseId(), lesson.getLessonId());
+        }
+        userService.updateUser(student);
+
     }
 
 }
